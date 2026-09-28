@@ -1,0 +1,675 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Brokenhearted Quiz ??</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background: linear-gradient(
+                135deg,
+                #1a1a2e,
+                #16213e,
+                #533483
+            );
+
+            color: white;
+        }
+
+        .quiz-box {
+            width: 90%;
+            max-width: 650px;
+
+            background: rgba(255, 255, 255, 0.12);
+
+            padding: 35px;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.5);
+
+            text-align: center;
+
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 35px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #ddd;
+            margin-bottom: 25px;
+        }
+
+        #question-number {
+            color: #ff8fab;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        #question {
+            font-size: 23px;
+            margin: 25px 0;
+            line-height: 1.4;
+        }
+
+        .choice {
+            display: block;
+
+            width: 100%;
+
+            padding: 15px;
+
+            margin: 12px 0;
+
+            border: 2px solid transparent;
+
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, 0.15);
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .choice:hover {
+            background: rgba(255, 255, 255, 0.3);
+
+            transform: scale(1.02);
+        }
+
+        .choice.selected {
+            background: #e75480;
+
+            border-color: #ffb3c6;
+        }
+
+        #next-button,
+        #restart-button {
+
+            margin-top: 20px;
+
+            padding: 13px 30px;
+
+            border: none;
+
+            border-radius: 25px;
+
+            background: #e75480;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        #next-button:hover,
+        #restart-button:hover {
+            background: #ff6b91;
+        }
+
+        #next-button {
+            display: none;
+        }
+
+        #restart-button {
+            display: none;
+        }
+
+        #score {
+            margin-top: 20px;
+
+            color: #ffb3c6;
+
+            font-weight: bold;
+        }
+
+        #result {
+            font-size: 24px;
+
+            line-height: 1.5;
+
+            margin-top: 20px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="quiz-box">
+
+        <h1>?? Brokenhearted Quiz</h1>
+
+        <div class="subtitle">
+            Mga tanong na masakit sagutin ??
+        </div>
+
+        <div id="question-number">
+            Question 1
+        </div>
+
+        <div id="question">
+            Loading...
+        </div>
+
+        <div id="choices">
+        </div>
+
+        <button id="next-button" onclick="nextQuestion()">
+            Next ??
+        </button>
+
+        <div id="score">
+            Score: 0
+        </div>
+
+        <div id="result">
+        </div>
+
+        <button id="restart-button" onclick="restartQuiz()">
+            Try Again ??
+        </button>
+
+    </div>
+
+
+    <script>
+
+        // =========================================
+        // QUESTIONS
+        // =========================================
+
+        const questions = [
+
+            {
+                question: "Minahal ka ba talaga, o nasanay lang siya sa'yo?",
+
+                choices: [
+                    "Minahal talaga ako ??",
+                    "Nasanay lang siya",
+                    "Pareho",
+                    "Hindi ko rin alam ??"
+                ]
+            },
+
+            {
+                question: "Kung mahal ka niya, bakit ka niya iniwan?",
+
+                choices: [
+                    "Hindi siya ready",
+                    "May iba na siya",
+                    "Nagbago ang feelings niya",
+                    "Baka hindi talaga ako ang gusto niya ??"
+                ]
+            },
+
+            {
+                question: "Ano ang mas masakit?",
+
+                choices: [
+                    "Hindi minahal",
+                    "Minahal pero hindi pinili",
+                    "Iniwan nang walang explanation",
+                    "Nakita mong masaya siya sa iba ??"
+                ]
+            },
+
+            {
+                question: "Kung babalik siya, tatanggapin mo pa ba?",
+
+                choices: [
+                    "Oo, agad ??",
+                    "Pag-iisipan ko",
+                    "Hindi na",
+                    "Depende kung may effort siya"
+                ]
+            },
+
+            {
+                question: "Naging kayo ba talaga, o ikaw lang ang umasa?",
+
+                choices: [
+                    "Naging kami talaga",
+                    "Almost kami ??",
+                    "Ako lang pala ang umasa",
+                    "Friends lang daw kami ??"
+                ]
+            },
+
+            {
+                question: "Ano ang pinakamahirap sabihin pagkatapos ng breakup?",
+
+                choices: [
+                    "Goodbye.",
+                    "I still love you.",
+                    "I'm okay.",
+                    "I'm happy for you. ??"
+                ]
+            },
+
+            {
+                question: "Kaya mo bang maging kaibigan ang ex mo?",
+
+                choices: [
+                    "Yes, kaya ko",
+                    "Maybe someday",
+                    "Hindi talaga",
+                    "Friends with feelings ??"
+                ]
+            },
+
+            {
+                question: "Ano ang mas masakit?",
+
+                choices: [
+                    "Seen",
+                    "Delivered",
+                    "\"Kailangan natin mag-usap.\"",
+                    "\"May gusto akong sabihin sa'yo.\" ??"
+                ]
+            },
+
+            {
+                question: "Kung may bago na siya, ano ang gagawin mo?",
+
+                choices: [
+                    "Move on",
+                    "Iiyak muna ??",
+                    "I-stalk nang konti ??",
+                    "Magpapanggap na okay ako"
+                ]
+            },
+
+            {
+                question: "Totoo ba na time heals all wounds?",
+
+                choices: [
+                    "Oo",
+                    "Hindi",
+                    "Slowly",
+                    "Time + tulog + iyak ??"
+                ]
+            },
+
+            {
+                question: "Kung bibigyan ka ng chance na balikan ang past, ano ang pipiliin mo?",
+
+                choices: [
+                    "Hindi ko siya makikilala",
+                    "Makikilala ko pa rin siya",
+                    "Aayusin ko lahat",
+                    "Iiwasan ko na lang ??"
+                ]
+            },
+
+            {
+                question: "Ano ang pinaka-broken na ginagawa pagkatapos ng breakup?",
+
+                choices: [
+                    "Makinig ng sad songs",
+                    "Magbasa ng old messages",
+                    "Mag-stalk sa social media",
+                    "Lahat ng nabanggit ??"
+                ]
+            },
+
+            {
+                question: "Kung mahal mo pa siya pero ayaw na niya, ano ang gagawin mo?",
+
+                choices: [
+                    "Lalaban pa rin",
+                    "Bibigyan siya ng space",
+                    "Tatanggapin ko",
+                    "Iiyak muna bago mag-move on ??"
+                ]
+            },
+
+            {
+                question: "Ano ang mas mahirap tanggapin?",
+
+                choices: [
+                    "Tapos na kayo",
+                    "May iba na siya",
+                    "Hindi ka niya minahal tulad ng pagmamahal mo",
+                    "Lahat ??"
+                ]
+            },
+
+            {
+                question: "Kung sinabi niyang \"I still care about you,\" ano ang maiisip mo?",
+
+                choices: [
+                    "Baka may chance pa ??",
+                    "Okay...",
+                    "Baka friendly lang",
+                    "Huwag na akong paasahin ??"
+                ]
+            },
+
+            {
+                question: "Ano ang pinakamalaking red flag pagkatapos ng breakup?",
+
+                choices: [
+                    "\"Friends lang tayo\" pero sweet pa rin",
+                    "Biglang nag-post ng bagong partner",
+                    "Nagpaparamdam kapag lonely",
+                    "Lahat ng nabanggit ??"
+                ]
+            },
+
+            {
+                question: "Kung may chance kang magsabi ng isang bagay sa ex mo, ano ito?",
+
+                choices: [
+                    "I miss you.",
+                    "Thank you for everything.",
+                    "Bakit mo ako iniwan?",
+                    "I'm finally letting you go. ??"
+                ]
+            },
+
+            {
+                question: "Ano ang mas masakit?",
+
+                choices: [
+                    "Mahal mo siya pero hindi ka niya mahal",
+                    "Mahal ka niya pero hindi kayo pwede",
+                    "Mahal niyo ang isa't isa pero naghiwalay kayo",
+                    "Hindi mo alam kung minahal ka ba talaga"
+                ]
+            },
+
+            {
+                question: "Bakit tayo nahihirapang mag-let go?",
+
+                choices: [
+                    "Memories",
+                    "Feelings",
+                    "Hope na babalik siya",
+                    "Lahat ng nabanggit ??"
+                ]
+            },
+
+            {
+                question: "Pipiliin mo pa rin ba ang taong hindi ka pinili?",
+
+                choices: [
+                    "Oo, mahal ko pa rin siya",
+                    "Siguro kung magbago siya",
+                    "Hindi na",
+                    "Pipiliin ko naman ang sarili ko. ??"
+                ]
+            }
+
+        ];
+
+
+        // =========================================
+        // VARIABLES
+        // =========================================
+
+        let currentQuestion = 0;
+
+        let score = 0;
+
+        let selectedAnswer = false;
+
+
+        // =========================================
+        // HTML ELEMENTS
+        // =========================================
+
+        const questionNumber =
+            document.getElementById("question-number");
+
+        const question =
+            document.getElementById("question");
+
+        const choices =
+            document.getElementById("choices");
+
+        const nextButton =
+            document.getElementById("next-button");
+
+        const scoreDisplay =
+            document.getElementById("score");
+
+        const result =
+            document.getElementById("result");
+
+        const restartButton =
+            document.getElementById("restart-button");
+
+
+        // =========================================
+        // SHOW QUESTION
+        // =========================================
+
+        function showQuestion() {
+
+            selectedAnswer = false;
+
+            nextButton.style.display = "none";
+
+            result.innerHTML = "";
+
+            questionNumber.innerHTML =
+                "Question " +
+                (currentQuestion + 1) +
+                " of " +
+                questions.length;
+
+            question.innerHTML =
+                questions[currentQuestion].question;
+
+            choices.innerHTML = "";
+
+
+            questions[currentQuestion].choices.forEach(
+                function(choice) {
+
+                    const button =
+                        document.createElement("button");
+
+                    button.className = "choice";
+
+                    button.innerHTML = choice;
+
+
+                    button.onclick = function() {
+
+                        selectAnswer(button);
+
+                    };
+
+
+                    choices.appendChild(button);
+
+                }
+            );
+
+        }
+
+
+        // =========================================
+        // SELECT ANSWER
+        // =========================================
+
+        function selectAnswer(button) {
+
+            if (selectedAnswer) {
+                return;
+            }
+
+            selectedAnswer = true;
+
+            button.classList.add("selected");
+
+            score++;
+
+            scoreDisplay.innerHTML =
+                "Answers answered: " + score;
+
+            nextButton.style.display =
+                "inline-block";
+
+        }
+
+
+        // =========================================
+        // NEXT QUESTION
+        // =========================================
+
+        function nextQuestion() {
+
+            if (!selectedAnswer) {
+                return;
+            }
+
+            currentQuestion++;
+
+
+            if (currentQuestion < questions.length) {
+
+                showQuestion();
+
+            } else {
+
+                showResult();
+
+            }
+
+        }
+
+
+        // =========================================
+        // FINAL RESULT
+        // =========================================
+
+        function showResult() {
+
+            questionNumber.innerHTML =
+                "?? QUIZ COMPLETE ??";
+
+            question.innerHTML = "";
+
+            choices.innerHTML = "";
+
+            nextButton.style.display = "none";
+
+            scoreDisplay.style.display = "none";
+
+
+            let message;
+
+
+            if (score <= 5) {
+
+                message =
+                    "?? Mukhang naka-move on ka na...";
+
+            }
+
+            else if (score <= 10) {
+
+                message =
+                    "?? Medyo broken pa, pero kinakaya.";
+
+            }
+
+            else if (score <= 15) {
+
+                message =
+                    "?? Bro... kailangan mo ng yakap.";
+
+            }
+
+            else {
+
+                message =
+                    "???? BROKENHEARTED LEVEL: LEGENDARY";
+
+            }
+
+
+            result.innerHTML =
+                "You answered " +
+                score +
+                " questions.<br><br>" +
+                message;
+
+            restartButton.style.display =
+                "inline-block";
+
+        }
+
+
+        // =========================================
+        // RESTART
+        // =========================================
+
+        function restartQuiz() {
+
+            currentQuestion = 0;
+
+            score = 0;
+
+            scoreDisplay.style.display =
+                "block";
+
+            scoreDisplay.innerHTML =
+                "Score: 0";
+
+            restartButton.style.display =
+                "none";
+
+            showQuestion();
+
+        }
+
+
+        // =========================================
+        // START QUIZ
+        // =========================================
+
+        showQuestion();
+
+    </script>
+
+</body>
+
+</html>
+```
+
